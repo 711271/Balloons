@@ -2,42 +2,53 @@ public class Chaser {
   public PVector pos, vel, acc;
   public int SIZE = 20;
   public float MAX_SPEED = 5;
-  
+
   public Chaser() {
-    pos = new PVector(width,height).mult(0.5);
-    vel = new PVector(0,0);
-    acc = new PVector(0,0);
+    pos = new PVector(width, height).mult(0.5);
+    vel = new PVector(0, 0);
+    acc = new PVector(0, 0);
   }
-  
+
   public void move() {
     vel.add(acc);
-    pos.add(vel); 
+    pos.add(vel);
   }
-  
+
   public void chase(Balloon[] bs) {
     Balloon targetBalloon = target(bs);
-    
     PVector perfectVel = PVector
-      .sub(targetBalloon.pos,pos)
+      .sub(targetBalloon.pos, pos)
       .limit(MAX_SPEED);
     acc = PVector
-      .sub(perfectVel,vel)
+      .sub(perfectVel, vel)
       .limit(MAX_SPEED * 0.1);
   }
-  
+
   private Balloon target(Balloon[] balloons) {
-    
-    return balloons[0];
+    //2.a.1 variable for answer
+    Balloon bigBalloon = balloons[0];
+    //2.a.2 variable for size
+    int biggest = 0;
+    //2.b. traverse array with for loop
+    for (int i =0; i < balloons.length; i++) {
+      //2.c. if statement
+      if (balloons[i].size > biggest) {
+        biggest = balloons[i].size;
+        bigBalloon = balloons[i];
+      }
+    }
+    //2.d. return answer
+    return bigBalloon;
   }
-  
+
   public void draw() {
     pushMatrix();
     translate(pos.x, pos.y);
-    rotate(PVector.angleBetween(vel,new PVector(0,-1)));
+    rotate(PVector.angleBetween(vel, new PVector(0, -1)));
     fill(255);
-    circle(0,0,SIZE);
+    circle(0, 0, SIZE);
     fill(0);
-    circle(0,-SIZE/3,SIZE/3);
+    circle(0, -SIZE/3, SIZE/3);
     popMatrix();
   }
 }
